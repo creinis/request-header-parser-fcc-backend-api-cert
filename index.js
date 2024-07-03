@@ -11,10 +11,7 @@ app.use('/public', express.static('public'));
 
 const dbConnection = () => {
   console.log('Attempting to connect to MongoDB...');
-  mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
+  mongoose.connect(process.env.MONGODB_URI, {})
     .then(() => {
       console.log('Successfully connected to MongoDB');
     })
