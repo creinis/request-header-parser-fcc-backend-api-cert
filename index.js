@@ -1,31 +1,57 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
 const path = require('path');
+const Request = require('./models/Request');
 
 const app = express();
 app.use(cors({ optionsSuccessStatus: 200 }));
 app.use(express.static('public'));
 
-// Serve static files
-app.use(express.static(path.join(__dirname, 'public')));
+// Função para conectar ao MongoDB com tentativa recursiva
+const connectWithRetry = () => {
+  console.log('Attempting to connect to MongoDB...');
+  mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+    .then(() => {
+      console.log('Successfully connected to MongoDB');
+    })
+    .catch((err) => {
+      console.error('Failed to connect to MongoDB:', err);
+      console.log('Retrying in 5 seconds...');
+      setTimeout(connectWithRetry, 5000);
+    });
+};
 
-// Basic route
+// Iniciar conexão com o MongoDB
+connectWithRetry();
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
-// API endpoint
-app.get('/api/whoami', (req, res) => {
-  res.json({
+app.get('/api/whoami', async (req, res) => {
+  const requestInfo = {
     ipaddress: req.socket.remoteAddress,
     language: req.headers['accept-language'],
     software: req.headers['user-agent']
-  });
+  };
+
+  const requestDoc = new Request(requestInfo);
+  await requestDoc.save();
+
+  res.json(requestInfo);
 });
 
-// Listen for requests
+app.get('/api/history', async (req, res) => {
+  const history = await Request.find().sort({ timestamp: -1 }).limit(10);
+  res.json(history);
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+  console.log('Your app is listening on port ' + port);
 });
