@@ -7,10 +7,9 @@ const Request = require('./models/Request');
 
 const app = express();
 app.use(cors({ optionsSuccessStatus: 200 }));
-app.use(express.static('public'));
+app.use('/public', express.static('public'));
 
-// Função para conectar ao MongoDB com tentativa recursiva
-const connectWithRetry = () => {
+const dbConnection = () => {
   console.log('Attempting to connect to MongoDB...');
   mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
@@ -22,12 +21,11 @@ const connectWithRetry = () => {
     .catch((err) => {
       console.error('Failed to connect to MongoDB:', err);
       console.log('Retrying in 5 seconds...');
-      setTimeout(connectWithRetry, 5000);
+      setTimeout(dbConnection, 5000);
     });
 };
 
-// Iniciar conexão com o MongoDB
-connectWithRetry();
+dbConnection();
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'index.html'));
