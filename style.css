@@ -19,6 +19,11 @@ body {
 	margin-top: 40px;
 }
 
+.translatedresult {
+	color: #2574A9; 
+	padding: 12px;
+}
+
 hr {
 	margin: 25px;
 }
@@ -35,7 +40,6 @@ button {
 
 .footer {
 	padding: 30px;
-	margin-top: 40px;
 }
 
 code {
