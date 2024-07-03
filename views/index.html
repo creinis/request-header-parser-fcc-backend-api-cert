@@ -26,22 +26,34 @@
           {"ipaddress":"::ffff:159.20.14.100","language":"en-US,en;q=0.5","software":"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:50.0) Gecko/20100101 Firefox/50.0"}
         </code>
       </p>
+      <div class="footer">
+        <p>
+          by <a href="https://www.freecodecamp.org">freeCodeCamp</a>
+        </p>
+      </div>
+      <hr/> 
+
   
       <button type="button" id="get-info">Get My Info</button>
-      <p id="result"></p>
-      <p id="translated-result"></p>
-  
-      <button type="button" id="get-history">Get Request History</button>
+      <div class="container">
+        <p id="result"></p>
+      </div>
+      <p class="translatedresult" id="translated-result"></p>
+      <div class="container">
+        <button type="button" id="get-history">Get Request History</button>
+        <br/>
+        <div class="container">
+          <div id="history"></div>
+        </div>
+      </div>
       <br/>
-      <p>
-        <a href="api/history">[base url]/api/history</a>
-      </p>
-      <br/>
-      <div id="history"></div>
-    </div>
+        <p>
+          <a href="api/history">[base url]/api/history</a>
+        </p>
+      </div>
     <div class="footer">
       <p>
-        by <a href="https://www.freecodecamp.org">freeCodeCamp</a>
+        by <a href="https://www.carlosreinis.com">Carlos Reinis</a>
       </p>
     </div>
     <script>
@@ -65,10 +77,14 @@
               const osInfo = `${browserInfo[2]} com processador e sistema operativo ${browserInfo[3]}`;
               const timestamp = browserInfo[5];
   
-              document.getElementById('translated-result').innerHTML = `
-                <p>Usuário, o seu endereço de IP é <strong>${ipaddress}</strong>, 
-                  você está usando o navegador <strong>${browserNameVersion}</strong> 
-                  em um computador <strong>${osInfo}</strong>, e o idioma configurado no seu navegador é <strong>${language}</strong>. Timestamp: <strong>${timestamp}</strong>.</p>`;
+              document.getElementById('translated-result').innerHTML = 
+              `<br/>
+                <p>
+                  User, your IP address is <strong>${ipaddress}</strong>, you are using the browser <strong>${browserNameVersion}</strong> <br/> 
+                  on a computer <strong>${osInfo}</strong>, and the language set in your browser is <strong>${language}</strong>. <br/>
+                  Timestamp: <strong>${timestamp}</strong>.
+                </p>`
+
             })
             .catch(error => console.error('Error:', error));
         });

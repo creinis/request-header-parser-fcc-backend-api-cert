@@ -5,12 +5,11 @@
     text-align: center;
   }
 
-
 body {
 	font-family: 'Roboto', sans-serif;
 	font-size: 16px;
 	color: #222;
-	background-color: #FaFaFa;
+	background-color: whitesmoke;
 	text-align: center;
 	line-height: 1.4em;
 }
@@ -25,10 +24,17 @@ hr {
 }
 
 h3 {
-  margin-top: 30px;
+	padding: 30px;
+  	margin-top: 30px;
+}
+
+button {
+	gap: 12px;
+	padding: 8px;
 }
 
 .footer {
+	padding: 30px;
 	margin-top: 40px;
 }
 
@@ -36,7 +42,7 @@ code {
   font-family: monospace;
   padding: 2px;
   color: black;
-  background-color: #fff;
+  background-color: white;
 }
 
 a {

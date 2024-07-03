@@ -9,7 +9,7 @@ body {
 	font-family: 'Roboto', sans-serif;
 	font-size: 16px;
 	color: #222;
-	background-color: #FaFaFa;
+	background-color: whitesmoke;
 	text-align: center;
 	line-height: 1.4em;
 }
@@ -19,23 +19,34 @@ body {
 	margin-top: 40px;
 }
 
+.translatedresult {
+	color: #2574A9; 
+	padding: 12px;
+}
+
 hr {
 	margin: 25px;
 }
 
 h3 {
-  margin-top: 30px;
+	padding: 30px;
+  	margin-top: 30px;
+}
+
+button {
+	gap: 12px;
+	padding: 8px;
 }
 
 .footer {
-	margin-top: 40px;
+	padding: 30px;
 }
 
 code {
   font-family: monospace;
   padding: 2px;
   color: black;
-  background-color: #fff;
+  background-color: white;
 }
 
 a {
