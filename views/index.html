@@ -1,83 +1,136 @@
 <!DOCTYPE html>
-
 <html lang="EN">
 
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">    
-    <title>Request Header Parser</title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-    <link href="/public/style.css" rel="stylesheet" type="text/css">
-    <link rel="icon" href="data:,">
-  </head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Request Header Parser</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+  <link rel="icon" href="data:,">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      text-align: center;
+    }
 
-   <body>
-    <div class="container">
-      <h2>Request Header Parser Microservice</h2>
-  
-      <h3>Example Usage:</h3>
-      <p>
-        <a href="api/whoami">[base url]/api/whoami</a>
-      </p>
-  
-      <h3>Example Output:</h3>
-      <p>
-        <code>
-          {"ipaddress":"::ffff:159.20.14.100","language":"en-US,en;q=0.5","software":"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:50.0) Gecko/20100101 Firefox/50.0"}
-        </code>
-      </p>
-      <div class="footer">
-        <p>
-          by <a href="https://www.freecodecamp.org">freeCodeCamp</a>
-        </p>
-      </div>
-      <hr/> 
+    body {
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+      color: #222;
+      background-color: whitesmoke;
+      text-align: center;
+      line-height: 1.4em;
+    }
 
-  
-      <button type="button" id="get-info">Get My Info</button>
-      <div class="container">
-        <p id="result"></p>
-      </div>
-      <p class="translatedresult" id="translated-result"></p>
-      <div class="container">
-        <button type="button" id="get-history">Get Request History</button>
-        <br/>
-        <div class="container">
-          <div id="history"></div>
-        </div>
-      </div>
-      <br/>
-        <p>
-          <a href="api/history">[base url]/api/history</a>
-        </p>
-      </div>
+    .container {
+      padding: 0;
+      margin-top: 40px;
+    }
+
+    .translatedresult {
+      color: #2574A9;
+      padding: 12px;
+    }
+
+    hr {
+      margin: 25px;
+    }
+
+    h3 {
+      padding: 30px;
+      margin-top: 30px;
+    }
+
+    button {
+      gap: 12px;
+      padding: 8px;
+    }
+
+    .footer {
+      padding: 30px;
+    }
+
+    code {
+      font-family: monospace;
+      padding: 2px;
+      color: black;
+      background-color: white;
+    }
+
+    a {
+      color: #2574A9;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Request Header Parser Microservice</h2>
+
+    <h3>Example Usage:</h3>
+    <p>
+      <a href="api/whoami">[base url]/api/whoami</a>
+    </p>
+
+    <h3>Example Output:</h3>
+    <p>
+      <code>
+        {"ipaddress":"::ffff:159.20.14.100","language":"en-US,en;q=0.5","software":"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:50.0) Gecko/20100101 Firefox/50.0"}
+      </code>
+    </p>
     <div class="footer">
       <p>
-        by <a href="https://www.carlosreinis.com">Carlos Reinis</a>
+        by <a href="https://www.freecodecamp.org">freeCodeCamp</a>
       </p>
     </div>
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('get-info').addEventListener('click', () => {
-          fetch('/api/whoami')
-            .then(response => response.json())
-            .then(data => {
-              document.getElementById('result').innerHTML = `<code>{
+    <hr />
+
+    <button type="button" id="get-info">Get My Info</button>
+    <div class="container">
+      <p id="result"></p>
+    </div>
+    <p class="translatedresult" id="translated-result"></p>
+    <div class="container">
+      <button type="button" id="get-history">Get Request History</button>
+      <br />
+      <div class="container">
+        <div id="history"></div>
+      </div>
+    </div>
+    <br />
+    <p>
+      <a href="api/history">[base url]/api/history</a>
+    </p>
+  </div>
+  <div class="footer">
+    <p>
+      by <a href="https://www.carlosreinis.com">Carlos Reinis</a>
+    </p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('get-info').addEventListener('click', () => {
+        fetch('/api/whoami')
+          .then(response => response.json())
+          .then(data => {
+            document.getElementById('result').innerHTML = `<code>{
                 "ipaddress": "${data.ipaddress}",
                 "language": "${data.language}",
                 "software": "${data.software}"
               }</code>`;
-  
-              const ipaddress = data.ipaddress.replace('::ffff:', '');
-              const language = data.language.split(',')[0];
-              const software = data.software;
-  
-              const browserInfo = software.match(/(\S+)\/\S+ \(([^;]+); ([^;]+); ([^;]+)\) (\S+) (\S+)/);
-              const browserNameVersion = `${browserInfo[1]} ${browserInfo[6]}`;
-              const osInfo = `${browserInfo[2]} com processador e sistema operativo ${browserInfo[3]}`;
-              const timestamp = browserInfo[5];
-  
-              document.getElementById('translated-result').innerHTML = 
+
+            const ipaddress = data.ipaddress.replace('::ffff:', '');
+            const language = data.language.split(',')[0];
+            const software = data.software;
+
+            const browserInfo = software.match(/(\S+)\/\S+ \(([^;]+); ([^;]+); ([^;]+)\) (\S+) (\S+)/);
+            const browserNameVersion = `${browserInfo[1]} ${browserInfo[6]}`;
+            const osInfo = `${browserInfo[2]} com processador e sistema operativo ${browserInfo[3]}`;
+            const timestamp = browserInfo[5];
+
+            document.getElementById('translated-result').innerHTML =
               `<br/>
                 <p>
                   User, your IP address is <strong>${ipaddress}</strong>, you are using the browser <strong>${browserNameVersion}</strong> <br/> 
@@ -85,29 +138,29 @@
                   Timestamp: <strong>${timestamp}</strong>.
                 </p>`
 
-            })
-            .catch(error => console.error('Error:', error));
-        });
-  
-        document.getElementById('get-history').addEventListener('click', () => {
-          fetch('/api/history')
-            .then(response => response.json())
-            .then(data => {
-              const historyElement = document.getElementById('history');
-              historyElement.innerHTML = '';
-              data.forEach(entry => {
-                historyElement.innerHTML += `<p><code>{
+          })
+          .catch(error => console.error('Error:', error));
+      });
+
+      document.getElementById('get-history').addEventListener('click', () => {
+        fetch('/api/history')
+          .then(response => response.json())
+          .then(data => {
+            const historyElement = document.getElementById('history');
+            historyElement.innerHTML = '';
+            data.forEach(entry => {
+              historyElement.innerHTML += `<p><code>{
                   "ipaddress": "${entry.ipaddress}",
                   "language": "${entry.language}",
                   "software": "${entry.software}",
                   "timestamp": "${new Date(entry.timestamp).toUTCString()}"
                 }</code></p>`;
-              });
-            })
-            .catch(error => console.error('Error:', error));
-        });
+            });
+          })
+          .catch(error => console.error('Error:', error));
       });
-    </script>
-  </body>
-  
-  </html>
+    });
+  </script>
+</body>
+
+</html>
